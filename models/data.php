@@ -1,14 +1,8 @@
 <?php
 //data class models that lies on the database
-interface Gonder{
-  function d_select();
-  function d_insert();
-  function d_update();
-  function d_delete();
-}
+require_once('db_proc.php');
 
-
-class Musteri implements Gonder{
+class Musteri{
   protected $musteri_id;
   protected $email;
   protected $sifre;
@@ -19,44 +13,96 @@ class Musteri implements Gonder{
   protected $posta_kodu;
   protected $ulke;
 
-  function d_select(){
-    //bring the all customer info and initialize
+
+  function __construct($email, $sifre, $telefon, $isim,
+                        $adres, $sehir, $posta_kodu, $ulke){
+      $this->email=$email;
+      $this->sifre=$sifre;
+      $this->telefon=$telefon;
+      $this->isim=$isim;
+      $this->adres=$adres;
+      $this->sehir=$sehir;
+      $this->posta_kodu=$posta_kodu;
+      $this->ulke=$ulke;
   }
-  function d_insert(){
-    //register a new customer
+
+  /* SAMPLE USAGE _execQ
+  $m_query = "insert into kitaplar values(?, ?, ?, ?, ...)";
+  $param_strs="sssd...";
+  $param1='1234569658741';
+  ...
+  $params=array(&$param1,&$param2,...);
+  _execQ($m_query, $param_strs, $params);
+  */
+  function register_musteri(){
+    //add it to database
+    $m_query="insert into musteriler values(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $param_strs="sssssssss";
+    $params=array(&$this->musteri_id, &$this->email, &$this->sifre, &$this->telefon, &$this->isim,
+              &$this->adres, &$this->sehir, &$this->posta_kodu, &$this->ulke);
+    $res=_execQ($m_query, $param_strs, $params);
+    return $res;
   }
-  function d_update(){
-    //update any info about customer given
+
+  function login_musteri(){
+    //check creditentals on db
+    //initialize values including $musteri_id if all passed
   }
-  function d_delete(){
+
+  function update_musteri($old_val, $new_val){
+    //update $_val about musteri in db
+    //by comparing $_old_val param with all attributes
+  }
+
+  function delete_musteri($info){
     //delete an account
   }
 
+  function get_customer_infos(){
+    return "infos{
+      \"id\":\"$this->musteri_id\",
+      \"email\":\"$this->email\",
+      \"telefon\":\"$this->telefon\",
+      \"isim\":\"$this->isim\",
+      \"adres\":\"$this->adres\",
+      \"sehir\":\"$this->sehir\",
+      \"posta_kodu\":\"$this->posta_kodu\",
+      \"ulke\":\"$this->ulke\"}";
+  }
 
+  public function add_yorum($isbn){
+
+  }
+
+  public function send_message($alici_id){
+
+  }
 }
 
 class Admin extends Musteri{
   private $kullanici_adi;
+  public function set_kullanici_adi($kullanici_adi){
+
+  }
+  public function get_kullanici_adi(){
+    return $kullanici_adi;
+  }
+  public function add_admin(){
+
+  }
+  public function add_kategori(){
+
+  }
+  public function add_kitap(){
+
+  }
+
 }
 
-class Kategoriler implements Gonder{
+class Kategoriler{
   protected $kategori_adi;
   protected $kategori_id;
-
-  function d_select(){
-    //bring the all categories and initialize
-  }
-  function d_insert(){
-    //add a new category
-  }
-  function d_update(){
-    //update any category attribute which is the name in that case
-  }
-  function d_delete(){
-    //delete a category
-  }
 }
-
 
 class Kitap extends Kategoriler{
   private $isbn;
@@ -67,7 +113,6 @@ class Kitap extends Kategoriler{
 
 }
 
-
 class Siparis{
   private $isbn; //from the book
   private $siparis_tutari;//book price
@@ -75,7 +120,7 @@ class Siparis{
 }
 
 
-class Siparisler implements Gonder{
+class Siparisler{
   private $siparis_id;
   private $_siparisler = array();//Add Siparis objects
   private $musteri_id;//the customer who these orders ($_siparisler) belong
@@ -88,65 +133,22 @@ class Siparisler implements Gonder{
   private $teslimat_pk;
   private $teslimat_ulkesi;
 
-  function d_select(){
-    //bring the all siparisler info user did
-  }
-  function d_insert(){
-    //insert a new siparis
-  }
-  function d_update(){
-    //update any info about siparisler if necessary
-  }
-  function d_delete(){
-    //delete a siparis or all
-  }
 }
 
-
-class Mesaj implements Gonder{
+class Mesaj{
   private $msg_id;
   private $alici_id;
   private $gonderici_id;
   private $tarih;
   private $mesaj;
 
-  function d_select(){
-    //bring the all messages for user
   }
-  function d_insert(){
-    //send a message
-  }
-  function d_update(){
-    //SHOULD NOT BE IMPLEMENTED
-  }
-  function d_delete(){
-    //SHOULD NOT BE IMPLEMENTED
-  }
-
-}
-
-class Yorum implements Gonder{
+class Yorum{
   private $yorum_id;
   private $isbn;//from book
   private $tarih;
   private $musteri_id;
   private $yorum;
 
-
-  function d_select(){
-    //bring the all messages for user
-  }
-  function d_insert(){
-    //send a message
-  }
-  function d_update(){
-    //SHOULD NOT BE IMPLEMENTED
-  }
-  function d_delete(){
-    //SHOULD NOT BE IMPLEMENTED
-  }
-
 }
-
-
 ?>

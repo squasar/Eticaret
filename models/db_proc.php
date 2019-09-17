@@ -13,7 +13,7 @@ class MySQLConnect{
       @self::$result=new mysqli(DB_ADDRESS, DB_USERNAME, DB_PASSWORD, DB_NAME);
       if(mysqli_connect_errno()){
         echo 'Error: Veritabanina baglanti saglanamadi. ';
-	exit;
+		exit;
       }
     }
     return self::$result;
@@ -44,7 +44,7 @@ class MySQLConnect{
 function _execQ($query, $param_strs, $params){
     $db = MySQLConnect::get_instance();
     $res = $db->prepare($query);
-    array_unshift($params, $param_strs);
+	  array_unshift($params, $param_strs);
     call_user_func_array(array($res, 'bind_param'), $params);
     $sonuc=$res->execute();
     return $sonuc;
