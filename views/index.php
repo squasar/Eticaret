@@ -1,9 +1,10 @@
 <?php
-//include all functions
-//create short variables
-//strat session
-//create session variables
-//give session parameters to controllers
-require('home.php');
+  require("../page.inc");
+  $homepage = new Page();
+  $homepage->content = "<p>IRC (Internet Relay Chat), yüksek lisans öğrencilerinin,
+  kendi projelerini rahatlıkla kendi odalarından tartışabilmelerini sağlmak amacıyla,
+  avrupadaki bir üniversitede geliştirilmiştir.</p>
+  <p>Ray Charles inanılmaz derecede yetenkli bir müzisyendir.</p>";
 
+  $homepage -> Display();
 ?>

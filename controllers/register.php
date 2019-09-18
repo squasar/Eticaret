@@ -14,6 +14,18 @@ $ulkeqty = $_POST['ulkeqty'];
 
 
 //some comparings and preprocesses...
+if(!get_magic_quotes_gpc()){
+  $isimqty = addslashes($isimqty);
+  $emailqty = addslashes($emailqty);
+  $sifreqty = addslashes($sifreqty);
+  $sifretekrarqty = addslashes($sifretekrarqty);
+  $telefonqty = addslashes($telefonqty);
+  $adresqty = addslashes($adresqty);
+  $sehirqty = addslashes($sehirqty);
+  $postakoduqty = addslashes($postakoduqty);
+  $ulkeqty = addslashes($ulkeqty);
+}
+
 $sifreqty=sha1($sifreqty);
 
 //create musteri
@@ -25,5 +37,4 @@ if($res){
 }else{
   echo "Kayit tamamlanamadi. Lutfen daha sonra tekrar deneyin.";
 }
-
 ?>
