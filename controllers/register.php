@@ -29,7 +29,7 @@ if(!get_magic_quotes_gpc()){
 $sifreqty=sha1($sifreqty);
 
 //create musteri
-$res = create_musteri($emailqty, $sifreqty, $telefonqty, $isimqty,
+$res=create_musteri($emailqty, $sifreqty, $telefonqty, $isimqty,
                       $adresqty, $sehirqty, $postakoduqty, $ulkeqty);
 
 if($res){
@@ -37,4 +37,7 @@ if($res){
 }else{
   echo "Kayit tamamlanamadi. Lutfen daha sonra tekrar deneyin.";
 }
+
+//header("location:../views/index.php");
+
 ?>

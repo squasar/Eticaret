@@ -14,16 +14,28 @@ class Musteri{
   protected $ulke;
 
 
-  function __construct($email, $sifre, $telefon, $isim,
+  function __construct(){
+
+  }
+
+  function __setAll($email, $sifre, $telefon, $isim,
                         $adres, $sehir, $posta_kodu, $ulke){
-      $this->email=$email;
-      $this->sifre=$sifre;
-      $this->telefon=$telefon;
-      $this->isim=$isim;
-      $this->adres=$adres;
-      $this->sehir=$sehir;
-      $this->posta_kodu=$posta_kodu;
-      $this->ulke=$ulke;
+    $this->email=$email;
+    $this->sifre=$sifre;
+    $this->telefon=$telefon;
+    $this->isim=$isim;
+    $this->adres=$adres;
+    $this->sehir=$sehir;
+    $this->posta_kodu=$posta_kodu;
+    $this->ulke=$ulke;
+}
+
+  function __setEmail($email){
+    $this->email=$email;
+  }
+
+  function __setSifre($sifre){
+    $this->sifre=$sifre;
   }
 
   /* SAMPLE USAGE _execQ
@@ -40,13 +52,19 @@ class Musteri{
     $param_strs="sssssssss";
     $params=array(&$this->musteri_id, &$this->email, &$this->sifre, &$this->telefon, &$this->isim,
               &$this->adres, &$this->sehir, &$this->posta_kodu, &$this->ulke);
-    $res=_execQ($m_query, $param_strs, $params);
+    $res=insert_execQ($m_query, $param_strs, $params);
     return $res;
   }
 
   function login_musteri(){
     //check creditentals on db
+    $m_query="select * from musteriler where email=? and sifre=?";
+    $param_strs="ss";
+    $params=array(&$this->email, &$this->sifre);
+    @$res=_execQ($m_query, $param_strs, $params);
     //initialize values including $musteri_id if all passed
+    //...
+    return $res;
   }
 
   function update_musteri($old_val, $new_val){
@@ -79,6 +97,9 @@ class Musteri{
   }
 }
 
+
+
+
 class Admin extends Musteri{
   private $kullanici_adi;
   public function set_kullanici_adi($kullanici_adi){
@@ -99,10 +120,18 @@ class Admin extends Musteri{
 
 }
 
+
+
+
+
+
+
+
 class Kategoriler{
   protected $kategori_adi;
   protected $kategori_id;
 }
+
 
 class Kitap extends Kategoriler{
   private $isbn;
@@ -112,6 +141,7 @@ class Kitap extends Kategoriler{
   private $aciklama;
 
 }
+
 
 class Siparis{
   private $isbn; //from the book
@@ -135,6 +165,7 @@ class Siparisler{
 
 }
 
+
 class Mesaj{
   private $msg_id;
   private $alici_id;
@@ -143,6 +174,9 @@ class Mesaj{
   private $mesaj;
 
   }
+
+
+
 class Yorum{
   private $yorum_id;
   private $isbn;//from book
@@ -151,4 +185,6 @@ class Yorum{
   private $yorum;
 
 }
+
+
 ?>

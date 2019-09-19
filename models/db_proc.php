@@ -11,6 +11,7 @@ class MySQLConnect{
   public static function get_instance(){
     if(empty(self::$result)){
       @self::$result=new mysqli(DB_ADDRESS, DB_USERNAME, DB_PASSWORD, DB_NAME);
+      @self::$result->set_charset("utf8");
       if(mysqli_connect_errno()){
         echo 'Error: Veritabanina baglanti saglanamadi. ';
 		exit;
@@ -21,6 +22,7 @@ class MySQLConnect{
   private static function reset_mysqli(){
     @self::$result->close();
       @self::$result=new mysqli(DB_ADDRESS, DB_USERNAME, DB_PASSWORD, DB_NAME);
+      @self::$result->set_charset("utf8");
     if(mysqli_connect_errno()){
       echo 'Error: Veritabanina baglanti saglanamadi.';
       exit;
@@ -29,6 +31,7 @@ class MySQLConnect{
   private static function set_mysqli_connection($web_address, $username, $password, $db_name){
     @self::$result->close();
     @self::$result=new mysqli($web_address, $username, $password, $db_name);
+    @self::$result->set_charset("utf8");
     if(mysqli_connect_errno()){
       echo 'Error: Veritabanina baglanti saglanamadi.';
       exit;
@@ -46,9 +49,21 @@ function _execQ($query, $param_strs, $params){
     $res = $db->prepare($query);
 	  array_unshift($params, $param_strs);
     call_user_func_array(array($res, 'bind_param'), $params);
-    $sonuc=$res->execute();
-    return $sonuc;
+    $bool = $res->execute();
+    $sonuclar = $res->get_result();
+    $rows = $sonuclar->fetch_all(MYSQLI_ASSOC);
+    return $rows;
 }
+
+function insert_execQ($query, $param_strs, $params){
+  $db = MySQLConnect::get_instance();
+  $res = $db->prepare($query);
+  array_unshift($params, $param_strs);
+  call_user_func_array(array($res, 'bind_param'), $params);
+  $sonuc=$res->execute();
+  return $sonuc;
+}
+
 /* SAMPLE USAGE _execQ
 $m_query = "insert into kitaplar values(?, ?, ?, ?, ...)";
 $param_strs="sssd...";

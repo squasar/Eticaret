@@ -99,13 +99,13 @@
       <?php
     }
 
-
     public function DisplayHeaderWithLogin(){
      ?>
       <!-- page header -->
-      <table width="100%" cellpadding="6" cellspacing="0" border="0">
+      <form action="../controllers/auth.php" method="post" style="margin-bottom:0;">
+        <table width="100%" cellpadding="6" cellspacing="0" border="0">
           <tr bgcolor="black">
-            <td align="left"><img src="logo.gif" alt="TLA logo" height="70" width="70"></td>
+            <td align="left"><img src="logo.gif" alt="Oxfirat logo" height="70" width="70"></td>
             <td align="center"  style="padding-left: 10em;"><h1>Oxfırat Kitap Mağazası</h1></td>
             <td align="right"></td>
           </tr>
@@ -114,7 +114,7 @@
             <td align="center"></td>
             <td align="right">
               <div style="color: white; font-size: 12pt;">
-                  Email: <input type="text" name="kitapyazarqty" size="15" maxlength="40">
+                  Email: <input type="text" name="emailqty" size="15" maxlength="40">
               </div>
             </td>
           </tr>
@@ -123,52 +123,56 @@
             <td align="center"></td>
             <td align="right">
               <div style="color: white; font-size: 12pt;">
-                Şifre: <input type="password" name="kitapyazarqty" size="15" maxlength="15">
+                Şifre: <input type="password" name="sifreqty" size="15" maxlength="15">
               </div>
             </td>
           </tr>
           <tr bgcolor="black">
             <td align="left"></td>
-            <td style="color: white; font-size: 12pt; padding-left: 10em;"
-              align="center";>Kitap/Yazar: <input type="text" name="kitapyazarqty" size="20" maxlength="20">
-                <input type="submit" value="Ara" colspan="2"></td>
+            <td align="center"></td>
             <td align="right">
               <div style="color: white; font-size: 12pt;">
+                <a href="sifremi_unuttum.php" style="color: blue; font-size: 10pt; padding-right: 1em">Şifremi unuttum?</a>
                 <input type="submit" value="Giriş" colspan="12" width="24">
               </div>
-
             </td>
           </tr>
-
         </table>
-
+      </form>
+      <form action="../controllers/arama.php" method="post" style="margin-bottom:1px;">
+        <table width="100%" cellpadding="4" cellspacing="0" border="0">
+          <tr bgcolor="black">
+            <td align="left"></td>
+            <td style="color: white; font-size: 12pt;" align="center";>Kitap/Yazar:
+              <input type="text" name="kitapyazarqty" size="20" maxlength="20">
+                <input type="submit" value="Ara" colspan="2">
+            </td>
+            <td align="right"></td>
+          </tr>
+        </table>
+      </form>
         <?php
       }
 
-
     public function DisplayHeader(){
       ?>
-
         <!-- page header -->
-        <table  class="neo" width="100%" cellpadding="6" cellspacing="0" border="0">
-          <tr bgcolor="black">
-            <td align="left"><img src="logo.gif" alt="TLA logo" height="70" width="70"></td>
-            <td align="center" style="padding-right: 10em;"><h1>Oxfırat Kitap Mağazası</h1></td>
-            <td align="right"></td>
-          </tr>
-
-
-
-          <tr bgcolor="black" >
-            <td align="left"></td>
-            <td style="color: white; font-size: 12pt; padding-right: 10em;"
-              align="center";>Kitap/Yazar: <input type="text" name="kitapyazarqty" size="20" maxlength="20">
-                <input type="submit" value="Ara" colspan="2"></td>
-            <td align="right">
-            </td>
-          </tr>
-
-        </table>
+        <form action="../controllers/arama.php" method="post" style="margin-bottom:1px;">
+          <table  class="neo" width="100%" cellpadding="6" cellspacing="0" border="0">
+            <tr bgcolor="black">
+              <td align="left"><img src="logo.gif" alt="Oxfirat logo" height="70" width="70"></td>
+              <td align="center" style="padding-right: 10em;"><h1>Oxfırat Kitap Mağazası</h1></td>
+              <td align="right"></td>
+            </tr>
+            <tr bgcolor="black" >
+              <td align="left"></td>
+              <td style="color: white; font-size: 12pt; padding-right: 10em;"
+                align="center";>Kitap/Yazar: <input type="text" name="kitapyazarqty" size="20" maxlength="20">
+                  <input type="submit" value="Ara" colspan="2"></td>
+              <td align="right"></td>
+            </tr>
+          </table>
+        </form>
       <?php
     }
 
