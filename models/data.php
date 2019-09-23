@@ -13,9 +13,7 @@ class Musteri{
   protected $posta_kodu;
   protected $ulke;
 
-
   function __construct(){
-
   }
 
   function __setAll($email, $sifre, $telefon, $isim,
@@ -38,14 +36,6 @@ class Musteri{
     $this->sifre=$sifre;
   }
 
-  /* SAMPLE USAGE _execQ
-  $m_query = "insert into kitaplar values(?, ?, ?, ?, ...)";
-  $param_strs="sssd...";
-  $param1='1234569658741';
-  ...
-  $params=array(&$param1,&$param2,...);
-  _execQ($m_query, $param_strs, $params);
-  */
   function register_musteri(){
     //add it to database
     $m_query="insert into musteriler values(?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -120,26 +110,146 @@ class Admin extends Musteri{
 
 }
 
-
-
-
-
-
-
-
-class Kategoriler{
+class Kategori{
   protected $kategori_adi;
   protected $kategori_id;
+
+  function get_kategoriler() {
+   $m_query = "select kategori_id, kategori_adi from kategoriler";
+   @$result=c_exec($m_query);
+   //initialize variables
+   //...
+   return $result;
+ }
+
+  function get_kategori_adi($catid) {
+   // query database for the name for a category id
+   $m_query = "select kategori_adi from kategoriler
+             where kategori_id=?";
+   $param_strs="i";
+   $params=array(&$catid);
+   @$res=_execQ($m_query, $param_strs, $params);
+   //Some initializations if necessary
+   //...
+   return $res;
+ }
+
+ function add_kategori($catname){
+   $m_query="insert into kategoriler values(?, ?)";
+   $param_strs="ss";
+   $params=array(&$this->kategori_id, &$catname);
+   @$res=insert_execQ($m_query, $param_strs, $params);
+   //Some preprocesses if necessary
+   //...
+   return $res;
+ }
+
+ function delete_kategori($catid){
+
+ }
 }
 
 
-class Kitap extends Kategoriler{
+class Kitap extends Kategori{
   private $isbn;
   private $yazar;
   private $baslik;
   private $fiyat;
   private $aciklama;
 
+  public function set_all($isbn, $yazar, $baslik, $fiyat, $aciklama, $kategori_id){
+    set_isbn($isbn);
+    set_yazar($yazar);
+    set_baslik($baslik);
+    $this->fiyat=$fiyat;
+    $this->aciklama=$aciklama;
+    set_kategori($kategori_id);
+  }
+
+  public function set_isbn($isbn){
+    $this->isbn=$isbn;
+  }
+
+  public function set_yazar($yazar){
+    $this->yazar=$yazar;
+  }
+
+  public function set_baslik($baslik){
+    $this->baslik=$baslik;
+  }
+
+  public function set_kategori($catid){
+    $this->kategori_id=$catid;
+    $this->kategori_adi=$this->get_kategori_adi($this->kategori_id);
+  }
+
+  public function tum_kitaplar_getir(){
+    $m_query = "select * from kitaplar";
+    @$result=c_exec($m_query);
+    //initialize variables
+    //...
+    return $result;
+  }
+
+  public function kategori_kitaplar_getir(){
+    $m_query = "select * from kitaplar
+              where kategori_id=?";
+    $param_strs="i";
+    $params=array(&$this->kategori_id);
+    @$res=_execQ($m_query, $param_strs, $params);
+    //Some initializations if necessary
+    //...
+    return $res;
+  }
+
+  public function isbn_kitap_getir(){
+    $m_query = "select * from kitaplar
+              where isbn=?";
+    $param_strs="s";
+    $params=array(&$this->isbn);
+    @$res=_execQ($m_query, $param_strs, $params);
+    //Some initializations if necessary
+    //...
+    return $res;
+  }
+
+  public function yazar_kitaplar_getir(){
+    $m_query = "select * from kitaplar
+              where yazar=?";
+    $param_strs="s";
+    $params=array(&$this->yazar);
+    @$res=_execQ($m_query, $param_strs, $params);
+    //Some initializations if necessary
+    //...
+    return $res;
+  }
+
+  public function baslik_kitap_getir(){
+    $m_query = "select * from kitaplar
+              where baslik=?";
+    $param_strs="s";
+    $params=array(&$this->baslik);
+    @$res=_execQ($m_query, $param_strs, $params);
+    //Some initializations if necessary
+    //...
+    return $res;
+  }
+
+  public function kitap_ekle(){
+    //tanimli bilgilere gore kitabi ekle
+    $m_query="insert into kitaplar values(?, ?, ?, ?, ?, ?)";
+    $param_strs="sssifs";
+    $params=array(&$this->isbn, &$this->yazar, &$this->baslik, &$this->kategori_id,
+                    &$this->fiyat, &$this->aciklama);
+    @$res=insert_execQ($m_query, $param_strs, $params);
+    //Some preprocesses if necessary
+    //...
+    return $res;
+  }
+
+  public function kitap_sil(){
+
+  }
 }
 
 

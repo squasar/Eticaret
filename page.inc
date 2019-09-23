@@ -7,8 +7,8 @@
                         Kitap Arama Motoru";
     public $buttons = array(
                     "Anasayfa" => "index.php",
-                    "Kategoriler" => "index.php",
-                    "Hakkımızda" => "index.php",
+                    "Kategoriler" => "../controllers/kategori_kitap_islemleri.php",
+                    "Hakkımızda" => "hakkimizda.php",
                     "Kayıt Ol" => "sayfa_kayit_ol.php",
                   );
     //class Page's operations
@@ -94,6 +94,32 @@
         table.foot{
           position: absolute;
           bottom: 0px;
+        }
+        table.m_navbar{
+          margin-top: 24px;
+        }
+        table.m_content{
+          margin-top: 24px;
+        }
+
+        .inline{
+          display: inline;
+
+        }
+        .link-button {
+          background: none;
+          border: none;
+          color: white;
+          text-decoration: underline;
+          cursor: pointer;
+          font-size: 1em;
+          font-family: serif;
+        }
+        .link-button:focus {
+          outline: none;
+        }
+        .link-button:active {
+          color:red;
         }
         </style>
       <?php
@@ -212,4 +238,206 @@
       <?php
     }
   }
+
+  class LoggedInPage extends Page{
+    protected $new_buttons = array(
+              "Anasayfa" => "in_anasayfa.php",
+              "Kategoriler" => "../controllers/kategori_kitap_islemleri.php",
+              "Profil" => "in_profil.php",
+              "Siparişlerim" => "in_siparislerim.php",
+              "Sepetim" => "in_sepetim.php",
+              "Çıkış" => "../controllers/logout.php"
+              );
+    public function Display(){
+      echo "<meta charset=\"utf-8\"";
+      echo "<html>\n<head>\n";
+      $this -> DisplayTitle();
+      $this -> DisplayKeywords();
+      $this -> DisplayStyles();
+      echo "</head>\n<body>\n";
+      $this -> DisplayHeader();
+      $this -> DisplayMenu($this->new_buttons);
+      echo $this->content;
+      $this->DisplayFooter();
+      echo "</body>\n</html>\n";
+    }
+  }
+
+
+  class OutPageCategoryIcerik extends Page{
+
+    private $kategoriler=array();
+    private $kitaplar=array(array());
+
+    public function __construct($kategoriler, $kitaplar){
+      $this->kategoriler=$kategoriler;
+      $this->kitaplar=$kitaplar;
+    }
+
+    public function m_Display(){
+      echo "<meta charset=\"utf-8\"";
+      echo "<html>\n<head>\n";
+      $this -> DisplayTitle();
+      $this -> DisplayKeywords();
+      $this -> DisplayStyles();
+      echo "</head>\n<body>\n";
+      $this -> DisplayHeaderWithLogin();
+      $this -> DisplayMenu($this->buttons);
+      //echo $this->content;
+      $this->content = $this->set_content();
+      $this->DisplayFooter();
+      echo "</body>\n</html>\n";
+    }
+
+    private function set_content(){
+      $this->display_navbar_in_kategoriler();
+      $this->display_content_in_kategoriler();
+    }
+
+    private function display_navbar_in_kategoriler(){
+      echo "
+      <table width=\"20%\" align=\"left\" class=\"m_navbar\">";
+      for ($i=0; $i < count($this->kategoriler); $i++){
+        echo "
+        <tr align=\"center\">
+          <td align=\"center\">
+            <form method=\"post\" action=\"in_kategoriler.php\" class=\"inline\">
+              <input type=\"hidden\" name=\"extra_par_".$this->kategoriler[$i]."\" value=\"extra_val_".$this->kategoriler[$i]."\">
+              <button type=\"submit\" name=\"par_".$this->kategoriler[$i]."\" value=\"val_".$this->kategoriler[$i]."\"
+                    class=\"link-button\">".
+                $this->kategoriler[$i]."
+              </button>
+            </form>
+          </td>
+        </tr>";
+      }
+      echo "</table>";
+
+  }
+    private function display_content_in_kategoriler(){
+      $secilen_kategori_indx;
+      $_is_secildi=false;
+      for ($i=0; $i < count($this->kategoriler); $i++) {
+        if(isset($_POST['extra_par_'.$this->kategoriler[$i]])){
+          $secilen_kategori_indx = $i;
+          $_is_secildi=true;
+        }else{
+          unset($_POST['extra_par_'.$this->kategoriler[$i]]);
+        }
+      }
+      if($_is_secildi){
+        echo  "<table width=\"%80\" style=\"color:white\" align=\"center\" class=\"m_content\">";
+        for ($i=0; $i < count($this->kitaplar[$secilen_kategori_indx]); $i++) {
+            echo "<tr align=\"center\">
+                    <td align=\"center\">
+                      <form method=\"post\" action=\"../controllers/kitap_detay.php\" class=\"inline\">
+                        <input type=\"hidden\" name=\"extra_par_"./*$this->kitaplar[$secilen_kategori_indx][$i]*/
+                                    $_SESSION['kitaplar'][$secilen_kategori_indx][$i]['isbn']."\"
+                              value=\"extra_val_".$this->kitaplar[$secilen_kategori_indx][$i]."\">
+                            <button type=\"submit\" name=\"par_".$this->kitaplar[$secilen_kategori_indx][$i]."\"
+                              value=\"val_".$this->kitaplar[$secilen_kategori_indx][$i]."\" class=\"link-button\">".
+                                    $this->kitaplar[$secilen_kategori_indx][$i].
+                            "</button>
+                      </form>
+                    </td>
+                  </tr>";
+            }
+        echo "</table>";
+      }else{
+        echo  "<table width=\"%80\" style=\"color:white\" align=\"center\" class=\"m_content\">".
+          "<tr align=\"center\">
+              <td align=\"center\">"."Lutfen bir kategori secin..."."</td>
+            </tr>
+          </table>";
+      }
+    }
+  }
+
+class InPageCategoryIcerik extends LoggedInPage{
+
+  private $kategoriler=array();
+  private $kitaplar=array(array());
+
+  public function __construct($kategoriler, $kitaplar){
+    $this->kategoriler=$kategoriler;
+    $this->kitaplar=$kitaplar;
+  }
+
+  public function m_Display(){
+    echo "<meta charset=\"utf-8\"";
+    echo "<html>\n<head>\n";
+    $this -> DisplayTitle();
+    $this -> DisplayKeywords();
+    $this -> DisplayStyles();
+    echo "</head>\n<body>\n";
+    $this -> DisplayHeader();
+    $this -> DisplayMenu($this->new_buttons);
+    $this->content = $this->set_content();
+    $this->DisplayFooter();
+    echo "</body>\n</html>\n";
+  }
+
+  private function set_content(){
+    $this->display_navbar_in_kategoriler();
+    $this->display_content_in_kategoriler();
+  }
+
+  private function display_navbar_in_kategoriler(){
+    echo "
+    <table width=\"20%\" align=\"left\" class=\"m_navbar\">";
+    for ($i=0; $i < count($this->kategoriler); $i++){
+      echo "
+      <tr align=\"center\">
+        <td align=\"center\">
+          <form method=\"post\" action=\"in_kategoriler.php\" class=\"inline\">
+            <input type=\"hidden\" name=\"extra_par_".$this->kategoriler[$i]."\" value=\"extra_val_".$this->kategoriler[$i]."\">
+            <button type=\"submit\" name=\"par_".$this->kategoriler[$i]."\" value=\"val_".$this->kategoriler[$i]."\"
+                class=\"link-button\">".
+              $this->kategoriler[$i]."
+            </button>
+          </form>
+        </td>
+      </tr>";
+    }
+    echo "</table>";
+
+}
+  private function display_content_in_kategoriler(){
+    $secilen_kategori_indx;
+    $_is_secildi=false;
+    for ($i=0; $i < count($this->kategoriler); $i++) {
+      if(isset($_POST['extra_par_'.$this->kategoriler[$i]])){
+        $secilen_kategori_indx = $i;
+        $_is_secildi=true;
+      }else{
+        unset($_POST['extra_par_'.$this->kategoriler[$i]]);
+      }
+    }
+    if($_is_secildi){
+      echo  "<table width=\"%80\" style=\"color:white\" align=\"center\" class=\"m_content\">";
+      for ($i=0; $i < count($this->kitaplar[$secilen_kategori_indx]); $i++) {
+          echo "<tr align=\"center\">
+                  <td align=\"center\">
+                    <form method=\"post\" action=\"../controllers/kitap_detay.php\" class=\"inline\">
+                      <input type=\"hidden\" name=\"extra_par_".$_SESSION['kitaplar'][$secilen_kategori_indx][$i]['isbn']."\"
+                            value=\"extra_val_".$this->kitaplar[$secilen_kategori_indx][$i]."\">
+                          <button type=\"submit\" name=\"par_".$this->kitaplar[$secilen_kategori_indx][$i]."\"
+                            value=\"val_".$this->kitaplar[$secilen_kategori_indx][$i]."\" class=\"link-button\">".
+                                  $this->kitaplar[$secilen_kategori_indx][$i].
+                          "</button>
+                    </form>
+                  </td>
+                </tr>";
+          }
+      echo "</table>";
+    }else{
+      echo  "<table width=\"%80\" style=\"color:white\" align=\"center\" class=\"m_content\">".
+        "<tr align=\"center\">
+            <td align=\"center\">"."Lutfen bir kategori secin..."."</td>
+          </tr>
+        </table>";
+    }
+  }
+}
+
 ?>
