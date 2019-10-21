@@ -1,5 +1,6 @@
 <?php
-require_once('init.php');
+//require_once('init.php');
+include_once 'autoload.php';
 
 // create short variable names
 $isimqty = $_POST['isimqty'];

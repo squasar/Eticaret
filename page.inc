@@ -6,10 +6,10 @@
     public $keywords = "Oxfırat Kitapçılık, Kitap Mağazası,
                         Kitap Arama Motoru";
     public $buttons = array(
-                    "Anasayfa" => "index.php",
+                    "Anasayfa" => "../views/index.php",
                     "Kategoriler" => "../controllers/kategori_kitap_islemleri.php",
-                    "Hakkımızda" => "hakkimizda.php",
-                    "Kayıt Ol" => "sayfa_kayit_ol.php",
+                    "Hakkımızda" => "../views/hakkimizda.php",
+                    "Kayıt Ol" => "../views/sayfa_kayit_ol.php",
                   );
     //class Page's operations
     public function __set($name, $value){
@@ -158,7 +158,7 @@
             <td align="center"></td>
             <td align="right">
               <div style="color: white; font-size: 12pt;">
-                <a href="sifremi_unuttum.php" style="color: blue; font-size: 10pt; padding-right: 1em">Şifremi unuttum?</a>
+                <a href="../views/sifremi_unuttum.php" style="color: blue; font-size: 10pt; padding-right: 1em">Şifremi unuttum?</a>
                 <input type="submit" value="Giriş" colspan="12" width="24">
               </div>
             </td>
@@ -231,7 +231,7 @@
         <tr>
           <td>
             <p class="foot">&copy; Oxfırat Ltd. Şti.</p>
-            <p class="foot"><a href="hakkimizda.php">Biz kim miyiz?</a></p>
+            <p class="foot"><a href="../views/hakkimizda.php">Biz kim miyiz?</a></p>
           </td>
         </tr>
       </table>
@@ -241,11 +241,13 @@
 
   class LoggedInPage extends Page{
     protected $new_buttons = array(
-              "Anasayfa" => "in_anasayfa.php",
+              "Anasayfa" => "../views/in_anasayfa.php",
               "Kategoriler" => "../controllers/kategori_kitap_islemleri.php",
-              "Profil" => "in_profil.php",
-              "Siparişlerim" => "in_siparislerim.php",
-              "Sepetim" => "in_sepetim.php",
+              "Profil" => "../views/in_profil.php",
+              //"Siparişlerim" => "../views/in_siparislerim.php",
+              "Siparişlerim" => "../controllers/eski_siparis_islemleri.php",
+              //"Sepetim" => "../views/in_sepetim.php",
+              "Sepetim" => "../controllers/sepet_islemleri.php",
               "Çıkış" => "../controllers/logout.php"
               );
     public function Display(){
@@ -301,7 +303,7 @@
         echo "
         <tr align=\"center\">
           <td align=\"center\">
-            <form method=\"post\" action=\"in_kategoriler.php\" class=\"inline\">
+            <form method=\"post\" action=\"../views/in_kategoriler.php\" class=\"inline\">
               <input type=\"hidden\" name=\"extra_par_".$this->kategoriler[$i]."\" value=\"extra_val_".$this->kategoriler[$i]."\">
               <button type=\"submit\" name=\"par_".$this->kategoriler[$i]."\" value=\"val_".$this->kategoriler[$i]."\"
                     class=\"link-button\">".
@@ -389,7 +391,7 @@ class InPageCategoryIcerik extends LoggedInPage{
       echo "
       <tr align=\"center\">
         <td align=\"center\">
-          <form method=\"post\" action=\"in_kategoriler.php\" class=\"inline\">
+          <form method=\"post\" action=\"../views/in_kategoriler.php\" class=\"inline\">
             <input type=\"hidden\" name=\"extra_par_".$this->kategoriler[$i]."\" value=\"extra_val_".$this->kategoriler[$i]."\">
             <button type=\"submit\" name=\"par_".$this->kategoriler[$i]."\" value=\"val_".$this->kategoriler[$i]."\"
                 class=\"link-button\">".

@@ -1,6 +1,7 @@
 <?php
   require("../page.inc");
   session_start();
+
   
   if((isset($_SESSION['musteri_id']) && isset($_SESSION['isim']))){
     header("location:logged_in.php");

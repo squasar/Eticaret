@@ -1,6 +1,7 @@
 <?php
   require("../page.inc");
 
+
   if(!(isset($_SESSION['musteri_id']) && isset($_SESSION['isim']))){
     $homepage = new LoggedInPage();
     session_start();
